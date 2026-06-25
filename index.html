@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ミエリカ・ワークス</title>
+<link rel="icon" href="imgs/mierika-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #4a7c59;
+    --green-mid: #6fa87a;
+    --green-light: #a8d5b5;
+    --green-pale: #d6edd9;
+    --cream: #f8f4ee;
+    --cream-dark: #ede8df;
+    --brown: #7a6652;
+    --text: #3d3a35;
+    --text-light: #7a7570;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(248,244,238,0.92);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--green-pale);
+  }
+
+  .nav-logo {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 1.1rem;
+    color: var(--green-dark);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo-img {
+    height: 28px;
+    width: auto;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green-dark); }
+
+  /* ========== HERO ========== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px 30px;
+    background: linear-gradient(160deg, var(--cream) 50%, var(--green-pale) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-deco {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--green-light);
+    opacity: 0.18;
+  }
+  .deco1 { width: 420px; height: 420px; top: -80px; right: -60px; }
+  .deco2 { width: 220px; height: 220px; bottom: 60px; left: -40px; }
+  .deco3 { width: 100px; height: 100px; top: 30%; right: 18%; }
+
+  .hero-inner {
+    max-width: 800px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+.hero-catch {
+    font-size: clamp(1rem, 3vw, 1.35rem);
+    color: var(--brown);
+    font-weight: 500;
+    margin-bottom: 20px;
+    letter-spacing: 0.06em;
+  }
+
+  .hero-sub {
+    font-size: 0.92rem;
+    color: var(--text-light);
+    max-width: 480px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-illust {
+    width: 220px;
+    margin: 0 auto 32px;
+  }
+
+  .hero-illust img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--green-dark);
+    color: #fff;
+    text-decoration: none;
+    padding: 13px 34px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--green-mid); transform: translateY(-2px); }
+
+  /* ========== SECTION COMMON ========== */
+  section { padding: 90px 40px; }
+
+  .section-inner { max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--green-mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    text-align: center;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    color: var(--green-dark);
+    margin-bottom: 48px;
+    font-weight: 600;
+  }
+
+  /* ========== ABOUT ========== */
+  #about { background: #fff; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .about-illust {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .about-illust img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 24px;
+  }
+
+  .about-text h3 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 1.25rem;
+    color: var(--green-dark);
+    margin-bottom: 14px;
+  }
+
+  .about-text p {
+    font-size: 0.93rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .tag {
+    background: var(--green-pale);
+    color: var(--green-dark);
+    border-radius: 50px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ========== WORKS ========== */
+  #works { background: var(--cream); }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .work-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(74,124,89,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .work-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(74,124,89,0.13);
+  }
+
+  .work-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .work-thumb {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--green-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-mid);
+    font-size: 0.78rem;
+    overflow: hidden;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+
+  .work-info {
+    padding: 16px 18px;
+  }
+
+  .work-cat {
+    font-size: 0.72rem;
+    color: var(--green-mid);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .work-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .works-links {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .note-banner {
+    grid-column: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 0.88rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .note-banner:hover { color: var(--green-dark); }
+
+  .note-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+  }
+
+  /* ========== SERVICES ========== */
+  #services { background: var(--green-pale); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .service-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(74,124,89,0.07);
+  }
+
+  .service-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--green-pale);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+  }
+
+  .service-card h3 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 1rem;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+  }
+
+  .service-card p {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    line-height: 1.7;
+  }
+
+  /* ========== CONTACT ========== */
+  #contact { background: #fff; text-align: center; }
+
+  .contact-box {
+    background: linear-gradient(135deg, var(--green-pale), var(--cream));
+    border-radius: 28px;
+    padding: 56px 40px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .contact-box p {
+    font-size: 0.92rem;
+    color: var(--text-light);
+    margin-bottom: 28px;
+  }
+
+  .contact-mail {
+    font-size: 1rem;
+    color: var(--green-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--green-light);
+    padding-bottom: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--green-dark);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 28px 40px;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+  }
+
+  footer span { color: #fff; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 700px) {
+    nav { padding: 12px 20px; }
+    .nav-links { gap: 16px; }
+    section { padding: 70px 20px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .works-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .contact-box { padding: 36px 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .works-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="imgs/mierika-logo.png" alt="ミエリカ・ワークス ロゴ" class="nav-logo-img">
+    ミエリカ・ワークス
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#services">Activities</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-deco deco1"></div>
+  <div class="hero-deco deco2"></div>
+  <div class="hero-deco deco3"></div>
+  <div class="hero-inner">
+    <div class="hero-illust"><img src="imgs/mierika-logo.png" alt="ミエリカ・ワークス ロゴ"></div>
+<p class="hero-catch">理科が見えると、わかる！つたわる</p>
+    <p class="hero-sub">科学の「見えない」をイラストとコンテンツで、やさしく・わかりやすく届けます。</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label">About</p>
+    <h2 class="section-title">ミエリカ・ワークスについて</h2>
+    <div class="about-grid">
+      <div class="about-illust"><img src="imgs/mierika-illust1.png" alt="ミエリカ・ワークス イラスト"></div>
+      <div class="about-text">
+        <h3>科学を、もっと身近に。</h3>
+        <p>「理科って難しそう」と感じる人に、イラストやビジュアルコンテンツを通じて、理科の面白さをわかりやすく届けることを大切にしています。</p>
+        <p>教科書や参考書のイラスト制作から、教育系動画・教材・ウェブコンテンツのビジュアルデザインまで、幅広くお手伝いしています。</p>
+        <div class="tags">
+          <span class="tag">イラスト制作</span>
+          <span class="tag">教育系コンテンツ</span>
+          <span class="tag">理科・サイエンス</span>
+          <span class="tag">図解・インフォグラフィック</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="section-inner">
+    <h2 class="section-title">Works</h2>
+    <div class="works-grid">
+      <div class="work-card">
+        <div class="work-thumb"><img src="imgs/cell.jpg" alt="cell"></div>
+        <div class="work-info">
+          <p class="work-cat">ILLUSTRATION</p>
+          <p class="work-title">イラスト制作</p>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-thumb"><img src="imgs/kaeru.png" alt="kaeru"></div>
+        <div class="work-info">
+          <p class="work-cat">VIDEO PRODUCTION</p>
+          <p class="work-title">動画制作</p>
+        </div>
+      </div>
+      <a href="portal.html" class="work-card">
+        <div class="work-thumb"><img src="imgs/index-introduction.png" alt="index-introduction"></div>
+        <div class="work-info">
+          <p class="work-cat">APP DEVELOPMENT</p>
+          <p class="work-title">アプリ制作</p>
+        </div>
+      </a>
+      <div class="works-links">
+        <a href="https://note.com/caeloolab" target="_blank" rel="noopener noreferrer" class="note-banner">
+          <img src="https://note.com/favicon.ico" alt="note icon" class="note-icon">
+          <span>note.com/caeloolab</span>
+        </a>
+        <a href="https://www.youtube.com/channel/UCYwtJOG7FUsBeXqlz5Kywrg" target="_blank" rel="noopener noreferrer" class="note-banner">
+          <img src="https://www.youtube.com/favicon.ico" alt="YouTube icon" class="note-icon">
+          <span>youtube.com/channel/UCYwtJOG7FUsBeXqlz5Kywrg</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <h2 class="section-title">Activities</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3>イラスト制作</h3>
+        <p>教科書・参考書・ウェブ用の理科・サイエンス系イラストを制作します。やわらかいタッチで、難しい概念もわかりやすく表現します。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📚</div>
+        <h3>教育コンテンツ制作</h3>
+        <p>動画・スライド・教材向けのビジュアルコンテンツ制作。学習者の理解を助けるデザインを心がけています。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>図解・インフォグラフィック</h3>
+        <p>複雑な情報や科学的なデータを、見やすくわかりやすい図解・インフォグラフィックとして整理・デザインします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-box">
+      <p>ご返信にはお時間をいただく場合がございます。</p>
+      <a href="mailto:mierika.works@gmail.com" class="contact-mail">mierika.works@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2024 <span>ミエリカ・ワークス</span>. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
