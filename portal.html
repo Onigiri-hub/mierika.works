@@ -37,6 +37,15 @@
     max-width: 360px;
   }
 
+  /* パソコンなど横に広い画面では2列（上段：Pochi英語・Pochi-Mine、下段：周期表パズル・Piyo理科） */
+  @media (min-width: 768px) {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 744px;
+    }
+  }
+
   .card {
     background-image: url('imgs/frame.png');
     background-size: 100% 100%;
