@@ -29,6 +29,87 @@
     gap: 8px;
   }
 
+  /* ヒーロー：森をキャラクターたちが歩き回る（動きは js/forest.js） */
+  .hero {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 32px;
+  }
+
+  .forest {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(to bottom, #f6f3ea 0 60%, #e2ebd0 60%);
+  }
+
+  @media (min-width: 768px) {
+    .hero { max-width: 744px; }
+    .forest { aspect-ratio: 1000 / 420; }
+  }
+
+  .sprite {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .pose {
+    position: absolute;
+    bottom: 0;
+    transform-origin: 50% 100%;
+  }
+
+  .anim {
+    position: relative;
+    transform-origin: 50% 100%;
+  }
+
+  .anim .frame {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .anim .book {
+    position: absolute;
+    left: 50%;
+    bottom: 18%;
+    width: 60%;
+    transform: translateX(-50%);
+  }
+
+  /* 歩くときはカクカク跳ねる */
+  .anim.is-walk { animation: hop 0.5s steps(1) infinite; }
+  @keyframes hop {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6%); }
+  }
+
+  /* ツンツンついばむ */
+  .anim.is-peck { animation: peck 0.4s ease-in-out infinite; }
+  @keyframes peck {
+    0%, 100% { transform: rotate(0); }
+    50% { transform: rotate(28deg); }
+  }
+
+  /* 本を読みながらゆらゆら */
+  .anim.is-read { animation: sway 2.4s ease-in-out infinite; }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim { animation: none !important; }
+  }
+
   .cards {
     display: flex;
     flex-direction: column;
@@ -128,6 +209,10 @@
 
 <!-- <h1>こもれび教室のアプリたち</h1> -->
 
+<div class="hero">
+  <div class="forest" role="img" aria-label="森でポチやひよこ、カエル、ちょうちょが遊んでいるイラスト"></div>
+</div>
+
 <div class="cards">
 
   <!-- Pochi英語 -->
@@ -167,6 +252,8 @@
 </div>
 
 <p class="copyright">&copy; 2026 <a href="index.html">ミエリカ・ワークス</a>. All rights reserved.</p>
+
+<script src="js/forest.js"></script>
 
 </body>
 </html>
