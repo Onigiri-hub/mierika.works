@@ -11,38 +11,79 @@
   const FRAME_SEC = 0.25;     // パタパタの切り替え間隔（秒）
 
   // 置き物。x は横幅に対する割合（0〜1）、w は幅（世界の単位）
-  // spot: 'stump' は本を読む場所、'flower' はちょうちょが止まる場所
+  // spot: 'stump' はカエルさんの実験台、'flower' はちょうちょが止まる場所
+  // inside: true なら、画面の幅が変わっても端で見切れないところまでで止める
   const SCENERY = [
-    { img: 'imgs/forest/tree.svg',   x: 0.10, y: 290, w: 200 },
-    { img: 'imgs/forest/tree.svg',   x: 0.88, y: 280, w: 180 },
-    { img: 'imgs/forest/tree.svg',   x: 0.68, y: 392, w: 150 },  // 手前の木
-    { img: 'imgs/forest/stump.svg',  x: 0.38, y: 335, w: 90, spot: 'stump' },
-    { img: 'imgs/forest/flower.svg', x: 0.22, y: 372, w: 24, spot: 'flower' },
-    { img: 'imgs/forest/flower.svg', x: 0.55, y: 300, w: 22, spot: 'flower' },
-    { img: 'imgs/forest/flower.svg', x: 0.93, y: 398, w: 24, spot: 'flower' },
+    // 木は「森の中のひらけた場所」を囲むように並べる。奥ほど小さく、手前ほど大きい。手前の中央はあけておく
+    // tree01 はほっそり高い木、tree02 はまるい木。同じ列では幅をそろえて、まるい木のほうが背が低く見えるようにする
+    // 奥の列（地面の奥のふち。キャラはいつもこの手前を歩く）
+    { img: 'imgs/forest/scenery/tree02.png', x: 0.25, y: 268, w: 108 },
+    { img: 'imgs/forest/scenery/tree01.png', x: 0.75, y: 268, w: 108 },
+    // 左右の中くらいの木
+    { img: 'imgs/forest/scenery/tree01.png', x: 0.10, y: 300, w: 108 },
+    { img: 'imgs/forest/scenery/tree02.png', x: 0.88, y: 300, w: 108 },
+    // 手前の両すみの大きな木（端にぴったり寄せる。キャラはいつもこの奥を歩く）
+    { img: 'imgs/forest/scenery/tree02.png', x: 0, y: 410, w: 138, inside: true },
+    { img: 'imgs/forest/scenery/tree01.png', x: 1, y: 412, w: 138, inside: true },
+    { img: 'imgs/forest/scenery/tree03.png',   x: 0.38, y: 335, w: 70, spot: 'stump' },
+    { img: 'imgs/forest/scenery/flower01.png', x: 0.22, y: 372, w: 30, spot: 'flower' },
+    { img: 'imgs/forest/scenery/flower02.png', x: 0.55, y: 300, w: 30, spot: 'flower' },
+    { img: 'imgs/forest/scenery/flower01.png', x: 0.76, y: 398, w: 30, spot: 'flower' },
     { img: 'imgs/forest/grass.svg',  x: 0.30, y: 404, w: 50 },
     { img: 'imgs/forest/grass.svg',  x: 0.50, y: 360, w: 44 },
     { img: 'imgs/forest/grass.svg',  x: 0.80, y: 330, w: 44 },
   ];
 
   // キャラクター。絵は右向きで描く（左へ進むときは自動で反転する）
-  // frames: 状態ごとのコマ画像（walk / idle / peck / read / fly / rest）。無い状態は idle のコマを使う
+  // frames: 状態ごとのコマ画像（walk / idle / peck / read / exp / fly / rest）。無い状態は idle のコマを使う
+  //   コマごとに表示時間を変えたいときは ['画像', 秒数] と書く
   // acts: やることの重み。大きいほどよく選ばれる
+  // frameSec: コマの切り替え間隔（秒）。書かなければ FRAME_SEC
+  // sizes: 状態ごとの大きさの倍率（例 { read: 1.1 } で読書中だけ 1.1 倍）
+  // readAnywhere: true なら切り株に行かず、好きな場所で本を読む
   const CAST = [
     {
-      name: 'pochi', w: 80, speed: 70,
-      frames: { idle: ['imgs/pochi.png'] },
+      name: 'pochi', w: 120, speed: 49, frameSec: 0.5, readAnywhere: true,
+      frames: {
+        idle: ['imgs/forest/pochi/idle-01.png'],
+        walk: [
+          'imgs/forest/pochi/walk-01.png', 'imgs/forest/pochi/walk-02.png',
+          'imgs/forest/pochi/walk-03.png', 'imgs/forest/pochi/walk-04.png',
+        ],
+        read: ['imgs/forest/pochi/read-01.png', 'imgs/forest/pochi/read-02.png'],
+      },
       acts: { wander: 4, idle: 1, read: 1 },
     },
     {
-      name: 'piyo', w: 50, speed: 50,
-      frames: { idle: ['imgs/forest/chick.svg'] },
+      name: 'piyo', w: 65, speed: 49, frameSec: 0.5,
+      frames: {
+        idle: ['imgs/forest/piyo/idle-01.png'],
+        walk: [
+          'imgs/forest/piyo/walk-01.png', 'imgs/forest/piyo/walk-02.png',
+          'imgs/forest/piyo/walk-03.png', 'imgs/forest/piyo/walk-04.png',
+        ],
+        peck: ['imgs/forest/piyo/peck-01.png', 'imgs/forest/piyo/peck-02.png'],
+      },
       acts: { wander: 3, peck: 4 },
     },
     {
-      name: 'kaeru', w: 70, speed: 40,
-      frames: { idle: ['imgs/forest/frog.svg'] },
-      acts: { wander: 2, read: 3, idle: 1 },
+      name: 'kaeru', w: 91, speed: 49, frameSec: 0.5,
+      frames: {
+        idle: ['imgs/forest/kaeru/idle-01.png'],
+        walk: [
+          'imgs/forest/kaeru/walk-01.png', 'imgs/forest/kaeru/walk-02.png',
+          'imgs/forest/kaeru/walk-03.png', 'imgs/forest/kaeru/walk-04.png',
+        ],
+        // 実験：試験管をちょいちょい×2 → ひと呼吸 → フラスコから煙 → 煙が出きる（02）
+        exp: [
+          ['imgs/forest/kaeru/exp-01.png', 0.3], ['imgs/forest/kaeru/exp-02.png', 0.3],
+          ['imgs/forest/kaeru/exp-01.png', 0.3], ['imgs/forest/kaeru/exp-02.png', 1.0],
+          ['imgs/forest/kaeru/exp-03.png', 0.4], ['imgs/forest/kaeru/exp-04.png', 0.4],
+          ['imgs/forest/kaeru/exp-05.png', 0.4], ['imgs/forest/kaeru/exp-06.png', 0.4],
+          ['imgs/forest/kaeru/exp-02.png', 1.2],
+        ],
+      },
+      acts: { wander: 2, exp: 3, idle: 1 },
     },
     {
       name: 'chocho', w: 40, speed: 60, fly: true, frameSec: 0.12,
@@ -98,7 +139,7 @@
   }
 
   function sizeSprite(sprite) {
-    const px = sprite.w * scale;
+    const px = sprite.w * (sprite.mul || 1) * scale;
     sprite.pose.style.width = px + 'px';
     sprite.pose.style.left = -px / 2 + 'px';
   }
@@ -115,7 +156,9 @@
 
     for (const p of props) {
       sizeSprite(p.sprite);
-      place(p.sprite, p.x * worldW, p.y, 0, false);
+      let x = p.x * worldW;
+      if (p.inside) x = clamp(x, p.w / 2, worldW - p.w / 2);
+      place(p.sprite, x, p.y, 0, false);
     }
     for (const a of actors) {
       sizeSprite(a.sprite);
@@ -126,25 +169,33 @@
   }
 
   // ----- キャラクター -----
+  // コマは '画像' か ['画像', 秒数]
+  const frameSrc = (f) => (Array.isArray(f) ? f[0] : f);
+  const frameSec = (def, f) => (Array.isArray(f) ? f[1] : def.frameSec || FRAME_SEC);
+
   function setState(a, state) {
     if (a.state === state) return;
     a.state = state;
-    a.sprite.anim.className = 'anim is-' + state;
+    // その状態のコマが描いてあればパタパタだけで動かし、無ければCSSで跳ねたり揺らしたりしてごまかす
+    a.sprite.anim.className = 'anim' + (a.def.frames[state] ? '' : ' is-' + state);
     a.frames = a.def.frames[state] || a.def.frames.idle;
+    a.sprite.mul = (a.def.sizes && a.def.sizes[state]) || 1;
+    sizeSprite(a.sprite);
     a.frameIdx = 0;
     a.frameT = 0;
-    a.sprite.img.src = a.frames[0];
-    a.book.hidden = state !== 'read';
+    a.sprite.img.src = frameSrc(a.frames[0]);
+    // 読書のコマがあるキャラは本も描いてあるので、本の画像は重ねない
+    a.book.hidden = state !== 'read' || !!a.def.frames.read;
   }
 
   function tickFrames(a, dt) {
     if (a.frames.length < 2) return;
-    const sec = a.def.frameSec || FRAME_SEC;
+    const sec = frameSec(a.def, a.frames[a.frameIdx]);
     a.frameT += dt;
     if (a.frameT < sec) return;
     a.frameT = 0;
     a.frameIdx = (a.frameIdx + 1) % a.frames.length;
-    const src = a.frames[a.frameIdx];
+    const src = frameSrc(a.frames[a.frameIdx]);
     if (a.sprite.img.getAttribute('src') !== src) a.sprite.img.src = src;
   }
 
@@ -180,6 +231,15 @@
       );
     },
     read(a) {
+      if (a.def.readAnywhere) {
+        // その場から少し歩いて座り、正面を向いて読む（正面の絵なので反転しない）
+        a.tasks.push(
+          { type: 'move', x: clamp(a.x + rand(-150, 150), 40, worldW - 40), y: rand(GROUND_TOP, GROUND_BOTTOM) },
+          { type: 'stay', state: 'read', face: 1, t: rand(6, 10) },
+          { type: 'stay', state: 'idle', t: 0.8 },
+        );
+        return;
+      }
       if (!stump || stump.user) return ACTS.wander(a);
       stump.user = a;
       // 切り株の左横に立って、切り株のほうを向いて読む
@@ -187,6 +247,17 @@
         { type: 'move', x: stump.x * worldW - stump.w / 2 - a.def.w * 0.3, y: stump.y + 3 },
         { type: 'stay', state: 'read', face: 1, t: rand(6, 10), onEnd: () => { stump.user = null; } },
         { type: 'stay', state: 'idle', t: 0.8 },
+      );
+    },
+    exp(a) {
+      // 切り株を実験台にして、そのすぐ後ろで実験のコマを1回通して見せる（正面の絵なので反転しない）
+      if (!stump || stump.user) return ACTS.wander(a);
+      stump.user = a;
+      const t = a.def.frames.exp.reduce((sum, f) => sum + frameSec(a.def, f), 0);
+      a.tasks.push(
+        { type: 'move', x: stump.x * worldW, y: stump.y - 4 },
+        { type: 'stay', state: 'exp', face: 1, t, onEnd: () => { stump.user = null; } },
+        { type: 'stay', state: 'idle', t: rand(0.8, 1.5) },
       );
     },
     fly(a) {
@@ -256,7 +327,7 @@
   layout();
 
   for (const def of CAST) {
-    const sprite = makeSprite(def.frames.idle[0], def.w);
+    const sprite = makeSprite(frameSrc(def.frames.idle[0]), def.w);
     const book = document.createElement('img');
     book.className = 'book';
     book.src = BOOK_IMG;
@@ -279,7 +350,7 @@
   layout();
 
   // コマ画像を先読みしておく
-  for (const def of CAST) for (const list of Object.values(def.frames)) for (const src of list) new Image().src = src;
+  for (const def of CAST) for (const list of Object.values(def.frames)) for (const f of list) new Image().src = frameSrc(f);
 
   new ResizeObserver(layout).observe(stage);
 

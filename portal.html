@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>こもれび教室のアプリたち</title>
 <link rel="icon" href="imgs/pochi.png">
+<!-- タイトル用の丸ゴシック。text= でタイトルに使う文字だけ読み込む（文字を変えたらここも直す） -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&text=Pochi%E3%81%A8%E3%81%9D%E3%81%AE%E4%BB%B2%E9%96%93%E3%81%9F%E3%81%A1%E3%81%AE%E3%81%93%E3%82%82%E3%82%8C%E3%81%B3%E6%95%99%E5%AE%A4&display=swap">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -36,13 +40,43 @@
     margin-bottom: 32px;
   }
 
+  /* タイトル：森の空に少し重ねる */
+  .hero-title {
+    display: block; /* 上の h1 の横並び（flex）を打ち消す */
+    position: relative;
+    z-index: 1;
+    margin-bottom: -3rem;
+    font-family: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+  }
+
+  .hero-title small {
+    display: block;
+    font-size: 0.95rem;
+  }
+
+  .hero-title span {
+    display: block;
+    font-size: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .hero-title { margin-bottom: -4.5rem; }
+    .hero-title small { font-size: 1.2rem; }
+    .hero-title span { font-size: 2.8rem; }
+  }
+
   .forest {
     position: relative;
+    isolation: isolate; /* キャラの重なり順をこの中だけで決めて、タイトルより下にする */
     width: 100%;
     aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: 18px;
-    background: linear-gradient(to bottom, #f6f3ea 0 60%, #e2ebd0 60%);
+    background: linear-gradient(to bottom, #ebebeb 0 60%, #d3e0b8 60%);
   }
 
   @media (min-width: 768px) {
@@ -210,6 +244,7 @@
 <!-- <h1>こもれび教室のアプリたち</h1> -->
 
 <div class="hero">
+  <h1 class="hero-title"><small>Pochiとその仲間たちの</small><span>こもれび教室</span></h1>
   <div class="forest" role="img" aria-label="森でポチやひよこ、カエル、ちょうちょが遊んでいるイラスト"></div>
 </div>
 
